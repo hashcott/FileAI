@@ -55,6 +55,39 @@ export default function DashboardPage() {
     deleteMutation.mutate({ id });
   };
 
+  const handleDownload = async (doc: { id: string; filename: string }) => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        toast({ title: "Error", description: "Please login again", variant: "destructive" });
+        return;
+      }
+
+      const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3001";
+      const response = await fetch(`${serverUrl}/api/files/${doc.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      if (!response.ok) throw new Error("Download failed");
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = doc.filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast({ title: "Success", description: "Download started" });
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to download file", variant: "destructive" });
+    }
+  };
+
   // Stats
   const totalDocuments = documents?.length || 0;
   const completedDocuments = documents?.filter((d) => d.processingStatus === "completed").length || 0;
@@ -297,6 +330,7 @@ export default function DashboardPage() {
                             variant="ghost"
                             className="h-8 w-8 p-0 text-slate-500 hover:text-blue-600"
                             disabled={doc.processingStatus !== "completed"}
+                            onClick={() => handleDownload(doc)}
                           >
                             <Download className="h-4 w-4" />
                           </Button>

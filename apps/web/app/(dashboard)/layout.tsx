@@ -17,6 +17,7 @@ import {
     ChevronDown,
     Bell,
     User,
+    FolderOpen,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Documents", href: "/dashboard/documents", icon: FolderOpen },
     { name: "Chat & Search", href: "/dashboard/search", icon: MessageSquare },
     { name: "Find Files", href: "/dashboard/files", icon: FolderSearch },
     { name: "Upload", href: "/dashboard/upload", icon: Upload },
