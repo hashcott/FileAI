@@ -75,8 +75,7 @@ const OrganizationSchema = new Schema<IOrganization>(
   }
 );
 
-// Indexes
-OrganizationSchema.index({ slug: 1 });
+// Indexes (slug index is created automatically via unique: true)
 OrganizationSchema.index({ ownerId: 1 });
 
 export const Organization = mongoose.model<IOrganization>(
