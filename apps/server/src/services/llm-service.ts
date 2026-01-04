@@ -1,5 +1,5 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { ChatOllama } from "@langchain/community/chat_models/ollama";
+import { ChatOllama } from "@langchain/ollama";
 import { SystemConfig } from "../db/models/SystemConfig";
 
 let llmInstance: ChatOpenAI | ChatOllama | null = null;

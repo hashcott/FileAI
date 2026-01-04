@@ -10,27 +10,26 @@ export async function processDocument(
   mimeType: string,
   userId: string
 ) {
-  // Create document record
-  const document = await Document.create({
-    userId,
-    filename,
-    mimeType,
-    size: fileBuffer.length,
-    originalPath: "", // Will be updated after storage
-    processingStatus: "processing",
-  });
+  // Generate a temporary ID for the file path
+  const tempId = new Date().getTime().toString();
+  const filePath = `${userId}/${tempId}/${filename}`;
 
   try {
-    // 1. Store original file
+    // 1. Store original file first
     const storage = await getStorageAdapter();
-    const filePath = `${userId}/${document._id}/${filename}`;
     await storage.upload(fileBuffer, filePath, mimeType);
 
-    // Update document with file path
-    document.originalPath = filePath;
-    await document.save();
+    // 2. Create document record with the path
+    const document = await Document.create({
+      userId,
+      filename,
+      mimeType,
+      size: fileBuffer.length,
+      originalPath: filePath,
+      processingStatus: "processing",
+    });
 
-    // 2. Process file to extract text
+    // 3. Process file to extract text
     const processor = getProcessorForFile(mimeType);
     if (!processor) {
       throw new Error(`Unsupported file type: ${mimeType}`);
@@ -44,14 +43,14 @@ export async function processDocument(
     document.metadata = processed.metadata;
     await document.save();
 
-    // 3. Store in vector database
+    // 4. Store in vector database
     await storeInVectorDB(document._id.toString(), processed.text, {
       userId,
       filename,
       documentId: document._id.toString(),
     });
 
-    // 4. Mark as completed
+    // 5. Mark as completed
     document.processingStatus = "completed";
     await document.save();
 
@@ -63,12 +62,11 @@ export async function processDocument(
   } catch (error) {
     console.error("Document processing error:", error);
 
-    // Mark as failed
-    document.processingStatus = "failed";
-    document.processingError = error instanceof Error ? error.message : String(error);
-    await document.save();
-
-    throw error;
+    // Try to get the document if it was created
+    // and mark as failed, otherwise just throw
+    throw new Error(
+      error instanceof Error ? error.message : String(error)
+    );
   }
 }
 

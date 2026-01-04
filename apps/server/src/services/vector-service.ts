@@ -1,6 +1,7 @@
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { getVectorStore } from "./vector";
 import { CHUNK_SIZE, CHUNK_OVERLAP } from "@search-pdf/shared";
+import { randomUUID } from "crypto";
 
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: CHUNK_SIZE,
@@ -15,9 +16,9 @@ export async function storeInVectorDB(
   // Split text into chunks
   const chunks = await textSplitter.splitText(text);
 
-  // Prepare documents for vector store
+  // Prepare documents for vector store with UUID for each chunk
   const documents = chunks.map((chunk, index) => ({
-    id: `${documentId}_chunk_${index}`,
+    id: randomUUID(), // Use UUID instead of string concatenation
     content: chunk,
     metadata: {
       ...metadata,
@@ -55,16 +56,21 @@ export async function searchVectorStore(
 export async function deleteFromVectorDB(documentId: string) {
   const vectorStore = await getVectorStore();
 
-  // Find all chunk IDs for this document
-  // In a real implementation, you might want to query first
-  // For now, we'll construct the IDs based on our naming convention
-  const results = await vectorStore.search("", 1000, { documentId });
+  // Search for all chunks belonging to this document using metadata filter
+  // Note: We search with an empty query but filter by documentId
+  // This requires the vector store to support metadata filtering
+  try {
+    const results = await vectorStore.search("", 1000, { documentId });
 
-  const chunkIds = results.map((r) => r.id);
+    const chunkIds = results.map((r) => r.id);
 
-  if (chunkIds.length > 0) {
-    await vectorStore.delete(chunkIds);
-    console.log(`Deleted ${chunkIds.length} chunks for document ${documentId}`);
+    if (chunkIds.length > 0) {
+      await vectorStore.delete(chunkIds);
+      console.log(`Deleted ${chunkIds.length} chunks for document ${documentId}`);
+    }
+  } catch (error) {
+    console.error(`Error deleting vectors for document ${documentId}:`, error);
+    // Don't throw - document can still be deleted even if vector cleanup fails
   }
 }
 

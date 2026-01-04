@@ -21,7 +21,7 @@ export class QdrantAdapter implements VectorStoreAdapter {
     this.collectionName = config.collectionName;
   }
 
-  private async ensureCollection() {
+  private async ensureCollection(vectorSize?: number) {
     if (this.initialized) return;
 
     try {
@@ -32,14 +32,17 @@ export class QdrantAdapter implements VectorStoreAdapter {
       );
 
       if (!exists) {
+        // Use provided vector size or default to 768 (Ollama nomic-embed-text)
+        const size = vectorSize || 768;
+        
         // Create collection
         await this.client.createCollection(this.collectionName, {
           vectors: {
-            size: 1536, // Default for OpenAI embeddings, adjust based on model
+            size: size,
             distance: "Cosine",
           },
         });
-        console.log(`Created Qdrant collection: ${this.collectionName}`);
+        console.log(`Created Qdrant collection: ${this.collectionName} with vector size ${size}`);
       }
 
       this.initialized = true;
@@ -50,12 +53,16 @@ export class QdrantAdapter implements VectorStoreAdapter {
   }
 
   async upsert(documents: VectorDocument[]): Promise<void> {
-    await this.ensureCollection();
+    if (documents.length === 0) return;
+
+    // Generate embedding for first document to determine vector size
+    const firstEmbedding = await getEmbedding(documents[0].content);
+    await this.ensureCollection(firstEmbedding.length);
 
     const points = [];
 
+    // Generate embeddings for all documents
     for (const doc of documents) {
-      // Generate embedding for document content
       const embedding = await getEmbedding(doc.content);
 
       points.push({
@@ -79,10 +86,9 @@ export class QdrantAdapter implements VectorStoreAdapter {
     topK: number,
     filter?: Record<string, any>
   ): Promise<SearchResult[]> {
-    await this.ensureCollection();
-
-    // Generate embedding for query
+    // Generate embedding to ensure collection exists with correct dimension
     const queryEmbedding = await getEmbedding(query);
+    await this.ensureCollection(queryEmbedding.length);
 
     // Build filter if provided
     const qdrantFilter = filter

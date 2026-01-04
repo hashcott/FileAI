@@ -92,10 +92,87 @@ export const documentRouter = router({
         });
       }
 
-      // TODO: Delete from storage and vector DB
+      try {
+        // Delete from storage
+        const { getStorageAdapter } = await import("../services/storage");
+        const storage = await getStorageAdapter();
+        await storage.delete(document.originalPath);
+      } catch (error) {
+        console.error("Failed to delete file from storage:", error);
+      }
+
+      try {
+        // Delete from vector DB
+        const { deleteFromVectorDB } = await import("../services/vector-service");
+        await deleteFromVectorDB(document._id.toString());
+      } catch (error) {
+        console.error("Failed to delete from vector DB:", error);
+      }
+
+      // Delete document record
       await document.deleteOne();
 
       return { success: true };
+    }),
+
+  download: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const document = await Document.findOne({
+        _id: input.id,
+        userId: ctx.userId,
+      });
+
+      if (!document) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Document not found",
+        });
+      }
+
+      const { getStorageAdapter } = await import("../services/storage");
+      const storage = await getStorageAdapter();
+      const url = await storage.getUrl(document.originalPath);
+
+      return {
+        url,
+        filename: document.filename,
+      };
+    }),
+
+  search: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().min(1),
+        topK: z.number().min(1).max(50).optional().default(10),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { searchVectorStore } = await import("../services/vector-service");
+      
+      const results = await searchVectorStore(
+        input.query,
+        ctx.userId!,
+        input.topK
+      );
+
+      // Get unique document IDs from results
+      const documentIds = [...new Set(results.map((r) => r.metadata.documentId))];
+
+      // Fetch document metadata
+      const documents = await Document.find({
+        _id: { $in: documentIds },
+        userId: ctx.userId,
+      });
+
+      const documentsMap = new Map(
+        documents.map((doc) => [doc._id.toString(), doc])
+      );
+
+      return results.map((result) => ({
+        ...result,
+        document: documentsMap.get(result.metadata.documentId),
+      }));
     }),
 });
 

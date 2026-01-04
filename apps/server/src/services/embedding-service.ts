@@ -1,5 +1,5 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
+import { OllamaEmbeddings } from "@langchain/ollama";
 import { SystemConfig } from "../db/models/SystemConfig";
 
 let embeddingsInstance: OpenAIEmbeddings | OllamaEmbeddings | null = null;
