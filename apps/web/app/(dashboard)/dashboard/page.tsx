@@ -126,27 +126,27 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="p-8 space-y-8">
-      {/* Stats Grid - Minimalist */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
+      {/* Stats Grid - Mobile Optimized */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map((stat, index) => (
           <Card key={index} className="card-hover border">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className="text-sm text-muted-foreground mb-1">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">
                     {stat.title}
                   </p>
-                  <p className="text-2xl font-semibold text-foreground">
+                  <p className="text-xl sm:text-2xl font-semibold text-foreground truncate">
                     {stat.value}
                   </p>
                   <div className="flex items-center gap-1 mt-2">
-                    <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">{stat.change}</span>
+                    <TrendingUp className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground flex-shrink-0" />
+                    <span className="text-xs text-muted-foreground truncate">{stat.change}</span>
                   </div>
                 </div>
-                <div className={`w-10 h-10 rounded-lg ${stat.gradient} flex items-center justify-center`}>
-                  <stat.icon className="h-5 w-5 text-white" />
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg ${stat.gradient} flex items-center justify-center flex-shrink-0`}>
+                  <stat.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 </div>
               </div>
             </CardContent>
@@ -154,19 +154,19 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Quick Actions - Minimalist */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Quick Actions - Mobile Optimized */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         <Link href="/dashboard/upload">
-          <Card className="card-hover border cursor-pointer group">
-            <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                <Upload className="h-5 w-5 text-foreground" />
+          <Card className="card-hover border cursor-pointer group touch-manipulation">
+            <CardContent className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
               </div>
-              <div>
-                <h3 className="font-medium text-foreground text-sm">
+              <div className="min-w-0">
+                <h3 className="font-medium text-foreground text-sm truncate">
                   Upload Documents
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5 truncate">
                   Add new files
                 </p>
               </div>
@@ -175,16 +175,16 @@ export default function DashboardPage() {
         </Link>
 
         <Link href="/dashboard/search">
-          <Card className="card-hover border cursor-pointer group">
-            <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                <Search className="h-5 w-5 text-foreground" />
+          <Card className="card-hover border cursor-pointer group touch-manipulation">
+            <CardContent className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                <Search className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
               </div>
-              <div>
-                <h3 className="font-medium text-foreground text-sm">
+              <div className="min-w-0">
+                <h3 className="font-medium text-foreground text-sm truncate">
                   Search & Chat
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5 truncate">
                   Ask questions
                 </p>
               </div>
@@ -193,16 +193,16 @@ export default function DashboardPage() {
         </Link>
 
         <Link href="/dashboard/files">
-          <Card className="card-hover border cursor-pointer group">
-            <CardContent className="p-5 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                <Eye className="h-5 w-5 text-foreground" />
+          <Card className="card-hover border cursor-pointer group touch-manipulation">
+            <CardContent className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
               </div>
-              <div>
-                <h3 className="font-medium text-foreground text-sm">
+              <div className="min-w-0">
+                <h3 className="font-medium text-foreground text-sm truncate">
                   Find Files
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5 truncate">
                   Semantic search
                 </p>
               </div>
@@ -252,7 +252,97 @@ export default function DashboardPage() {
               </Link>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <>
+              {/* Mobile: Card View, Desktop: Table View */}
+              <div className="block md:hidden space-y-3">
+              {documents.map((doc) => (
+                <Card key={doc.id} className="border">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-md bg-accent flex items-center justify-center flex-shrink-0">
+                        <FileText className="h-5 w-5 text-foreground" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-foreground text-sm truncate mb-1">
+                          {doc.filename}
+                        </p>
+                        <p className="text-xs text-muted-foreground mb-2">
+                          {doc.mimeType} • {formatBytes(doc.size)}
+                        </p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium ${
+                              doc.processingStatus === "completed"
+                                ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400"
+                                : doc.processingStatus === "failed"
+                                ? "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400"
+                                : "bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400"
+                            }`}
+                          >
+                            {doc.processingStatus === "completed" && (
+                              <CheckCircle className="h-3 w-3" />
+                            )}
+                            {doc.processingStatus === "processing" && (
+                              <Clock className="h-3 w-3 animate-spin" />
+                            )}
+                            {doc.processingStatus === "failed" && (
+                              <AlertCircle className="h-3 w-3" />
+                            )}
+                            {doc.processingStatus}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {formatDate(doc.createdAt)}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground touch-manipulation"
+                          disabled={doc.processingStatus !== "completed"}
+                          onClick={() => handleDownload(doc)}
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-9 w-9 p-0 text-muted-foreground hover:text-destructive touch-manipulation"
+                              disabled={deleteMutation.isLoading}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="mx-4 max-w-[calc(100vw-2rem)]">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Document?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete "{doc.filename}" and all its
+                                associated data. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDelete(doc.id)}
+                                className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr style={{ borderBottom: "1px solid hsl(var(--border))" }}>
@@ -373,6 +463,7 @@ export default function DashboardPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </CardContent>
       </Card>

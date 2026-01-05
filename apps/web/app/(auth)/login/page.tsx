@@ -15,9 +15,9 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const loginMutation = trpc.auth.login.useMutation({
-        onSuccess: (data) => {
-            authService.setAuth(data.user as any, data.token);
+    const loginMutation = trpc?.auth?.login?.useMutation?.({
+        onSuccess: (data: { user: unknown; token: string }) => {
+            authService.setAuth(data.user, data.token);
             toast({
                 title: "Success",
                 description: "Logged in successfully",

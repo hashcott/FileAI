@@ -166,13 +166,14 @@ All colors MUST be HSL.
   background: hsl(var(--muted-foreground) / 0.5);
 }
 
-/* Flat Design 2.0 - Sidebar styles with rounded corners */
+/* Flat Design 2.0 - Sidebar styles with rounded corners - Mobile Optimized */
 .sidebar-item {
-  @apply flex items-center gap-3 px-3 py-2 transition-all duration-200;
+  @apply flex items-center gap-3 px-3 py-2.5 sm:py-2 transition-all duration-200;
   color: hsl(var(--sidebar-foreground));
   font-size: 0.875rem;
   font-weight: 500;
   border-radius: calc(var(--radius) - 2px);
+  min-height: 44px; /* Touch target size for mobile */
 }
 
 .sidebar-item:hover {
@@ -184,6 +185,12 @@ All colors MUST be HSL.
   background-color: hsl(var(--sidebar-primary));
   color: hsl(var(--sidebar-primary-foreground));
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+/* Touch-friendly interactions for mobile */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Flat Design 2.0 - Card with subtle shadow and rounded corners */

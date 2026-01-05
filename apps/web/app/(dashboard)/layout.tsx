@@ -141,7 +141,7 @@ export default function DashboardLayout({
                 />
             )}
 
-            {/* Sidebar Layout Pattern - Flat Design 2.0 */}
+            {/* Sidebar Layout Pattern - Mobile Optimized */}
             <aside
                 className={`fixed lg:static inset-y-0 left-0 z-50 flex flex-col transition-all duration-200 border-r ${
                     sidebarOpen ? "w-64" : "w-16"
@@ -153,6 +153,15 @@ export default function DashboardLayout({
                 style={{
                     backgroundColor: "hsl(var(--sidebar-background))",
                     borderColor: "hsl(var(--sidebar-border))",
+                }}
+                onClick={(e) => {
+                    // Close mobile menu when clicking on sidebar items
+                    if (window.innerWidth < 1024) {
+                        const target = e.target as HTMLElement;
+                        if (target.closest('a')) {
+                            setMobileMenuOpen(false);
+                        }
+                    }
                 }}
             >
                 {/* Logo - Flat Design 2.0 */}
@@ -183,20 +192,20 @@ export default function DashboardLayout({
                     </button>
                 </div>
 
-                {/* Navigation */}
-                <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+                {/* Navigation - Mobile Optimized */}
+                <nav className="flex-1 px-2 sm:px-3 py-4 space-y-1 overflow-y-auto">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
                         return (
                             <Link key={item.href} href={item.href}>
                                 <div
-                                    className={`sidebar-item ${
+                                    className={`sidebar-item touch-manipulation ${
                                         isActive ? "active" : ""
                                     }`}
                                     title={item.name}
                                 >
-                                    <item.icon className="h-4 w-4 flex-shrink-0" />
-                                    {sidebarOpen && <span className="truncate">{item.name}</span>}
+                                    <item.icon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                                    {sidebarOpen && <span className="truncate text-sm sm:text-base">{item.name}</span>}
                                 </div>
                             </Link>
                         );
@@ -205,37 +214,43 @@ export default function DashboardLayout({
 
                 {/* User Account Menu - Bottom of Sidebar */}
                 <div 
-                    className="p-3 border-t"
+                    className={`border-t ${sidebarOpen ? "p-3" : "p-2"}`}
                     style={{
                         borderColor: "hsl(var(--sidebar-border))",
                     }}
                 >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-md hover:bg-sidebar-accent transition-colors text-left">
+                            <button 
+                                className={`w-full flex items-center rounded-md hover:bg-sidebar-accent transition-colors ${
+                                    sidebarOpen 
+                                        ? "gap-3 px-3 py-2 text-left" 
+                                        : "justify-center p-2"
+                                }`}
+                            >
                                 <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
                                     <span className="text-sm font-semibold text-primary-foreground">
                                         {getInitials(user?.name, user?.email)}
                                     </span>
                                 </div>
                                 {sidebarOpen && (
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-sidebar-foreground truncate">
-                                            {user?.name || "Admin User"}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground truncate">
-                                            {user?.email || "admin@example.com"}
-                                        </p>
-                                    </div>
-                                )}
-                                {sidebarOpen && (
-                                    <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                    <>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-medium text-sidebar-foreground truncate">
+                                                {user?.name || "Admin User"}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground truncate">
+                                                {user?.email || "admin@example.com"}
+                                            </p>
+                                        </div>
+                                        <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                    </>
                                 )}
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
-                            align="end"
-                            side="right"
+                            align={sidebarOpen ? "end" : "start"}
+                            side={sidebarOpen ? "right" : "right"}
                             className="w-56"
                         >
                             <DropdownMenuItem asChild>
@@ -258,66 +273,53 @@ export default function DashboardLayout({
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-
-                {/* Collapse button - Desktop only */}
-                <button
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="hidden lg:flex items-center justify-center h-10 transition-colors hover:bg-sidebar-accent"
-                    style={{
-                        borderTop: "1px solid hsl(var(--sidebar-border))",
-                        color: "hsl(var(--sidebar-foreground))",
-                    }}
-                >
-                    <ChevronDown
-                        className={`h-4 w-4 transition-transform ${
-                            sidebarOpen ? "rotate-90" : "-rotate-90"
-                        }`}
-                    />
-                </button>
             </aside>
 
             {/* Main Content Area - Sidebar Layout Pattern */}
             <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Header - Updated with Search, Theme Toggle, and Notifications */}
+                {/* Header - Mobile Optimized */}
                 <header 
-                    className="h-16 border-b flex items-center gap-4 px-6 bg-background shadow-sm"
+                    className="h-14 sm:h-16 border-b flex items-center gap-2 sm:gap-4 px-3 sm:px-6 bg-background shadow-sm"
                     style={{ borderColor: "hsl(var(--border))" }}
                 >
                     {/* Toggle Sidebar Button */}
                     <button
                         onClick={() => setSidebarOpen(!sidebarOpen)}
                         className="hidden lg:flex text-muted-foreground hover:text-foreground p-2 rounded-md hover:bg-accent transition-colors"
+                        aria-label="Toggle sidebar"
                     >
                         <Menu className="h-5 w-5" />
                     </button>
                     <button
                         onClick={() => setMobileMenuOpen(true)}
-                        className="lg:hidden text-muted-foreground hover:text-foreground p-2 rounded-md hover:bg-accent transition-colors"
+                        className="lg:hidden text-muted-foreground hover:text-foreground p-2 rounded-md hover:bg-accent transition-colors touch-manipulation"
+                        aria-label="Open menu"
                     >
                         <Menu className="h-5 w-5" />
                     </button>
 
-                    {/* Search Bar - Full Width */}
-                    <form onSubmit={handleSearch} className="flex-1 mx-4">
+                    {/* Search Bar - Responsive */}
+                    <form onSubmit={handleSearch} className="flex-1 min-w-0 mx-2 sm:mx-4">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Search className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
                                 type="text"
                                 placeholder="Tìm kiếm..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 h-9 w-full"
+                                className="pl-8 sm:pl-10 h-9 w-full text-sm"
                             />
                         </div>
                     </form>
 
-                    {/* Right Side Actions */}
-                    <div className="flex items-center gap-2">
+                    {/* Right Side Actions - Mobile Optimized */}
+                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
-                            className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors"
+                            className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors touch-manipulation"
                             title={isDark ? "Light Mode" : "Dark Mode"}
+                            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
                         >
                             {isDark ? (
                                 <Sun className="h-5 w-5" />
@@ -327,10 +329,13 @@ export default function DashboardLayout({
                         </button>
 
                         {/* Notifications */}
-                        <button className="relative p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors">
+                        <button 
+                            className="relative p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors touch-manipulation"
+                            aria-label="Notifications"
+                        >
                             <Bell className="h-5 w-5" />
-                            <span className="absolute top-0 right-0 w-5 h-5 bg-destructive rounded-full flex items-center justify-center border-2 border-background">
-                                <span className="text-[10px] font-semibold text-destructive-foreground">3</span>
+                            <span className="absolute top-0 right-0 w-4 h-4 sm:w-5 sm:h-5 bg-destructive rounded-full flex items-center justify-center border-2 border-background">
+                                <span className="text-[9px] sm:text-[10px] font-semibold text-destructive-foreground">3</span>
                             </span>
                         </button>
                     </div>
