@@ -162,9 +162,9 @@ export default function DashboardLayout({
                 }}
             >
                 {/* Logo Section */}
-                <div className="flex items-center justify-between h-20 px-4 border-b border-border/40 dark:border-border/50">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-ai-gradient p-[1px] shadow-ai">
+                <div className={`flex items-center h-20 border-b border-border/40 dark:border-border/50 ${sidebarOpen ? "justify-between px-4" : "justify-center px-0"}`}>
+                    <div className={`flex items-center ${sidebarOpen ? "gap-3" : "gap-0"}`}>
+                        <div className="w-10 h-10 rounded-xl bg-ai-gradient p-[1px] shadow-ai flex-shrink-0">
                             <div className="w-full h-full bg-background rounded-[11px] flex items-center justify-center">
                                 <FileText className="h-5 w-5 text-primary" />
                             </div>
@@ -180,7 +180,7 @@ export default function DashboardLayout({
                             </div>
                         )}
                     </div>
-                    {mobileMenuOpen && (
+                    {sidebarOpen && mobileMenuOpen && (
                         <button
                             onClick={() => setMobileMenuOpen(false)}
                             className="lg:hidden p-2 rounded-full hover:bg-accent/50 transition-colors"
@@ -197,11 +197,10 @@ export default function DashboardLayout({
                         return (
                             <Link key={item.href} href={item.href}>
                                 <div
-                                    className={`sidebar-item group ${isActive ? "active" : "hover:bg-accent/30"
-                                        }`}
+                                    className={`sidebar-item group ${isActive ? "active" : "hover:bg-accent/30"} ${!sidebarOpen ? "justify-center px-0" : ""}`}
                                     title={item.name}
                                 >
-                                    <item.icon className={`h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-white" : "text-muted-foreground"}`} />
+                                    <item.icon className={`h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-white" : "text-muted-foreground"} ${!sidebarOpen ? "m-0" : ""}`} />
                                     {sidebarOpen && <span className="truncate font-medium animate-fadeIn">{item.name}</span>}
                                     {isActive && sidebarOpen && (
                                         <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
@@ -357,11 +356,9 @@ export default function DashboardLayout({
                     </div>
                 </header>
 
-                {/* Page Content with refined padding */}
-                <main className="flex-1 overflow-auto scroll-smooth">
-                    <div className="animate-fadeIn pb-12">
-                        {children}
-                    </div>
+                {/* Page Content - Scrolling handled by individual pages */}
+                <main className="flex-1 overflow-hidden relative">
+                    {children}
                 </main>
             </div>
         </div>

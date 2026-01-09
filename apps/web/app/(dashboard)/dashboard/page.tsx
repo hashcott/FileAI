@@ -127,7 +127,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="p-6 sm:p-8 lg:p-10 space-y-10 max-w-[1600px] mx-auto animate-fadeIn">
+    <div className="h-full overflow-y-auto p-6 sm:p-8 lg:p-10 pb-20 space-y-10 max-w-[1600px] mx-auto animate-fadeIn custom-scrollbar">
       {/* Page Header Area */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>

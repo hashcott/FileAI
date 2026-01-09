@@ -583,7 +583,7 @@ export default function DocumentsPage() {
     };
 
     return (
-        <div className="p-8 sm:p-10 space-y-10 max-w-[1600px] mx-auto animate-fadeIn">
+        <div className="h-full overflow-y-auto p-8 sm:p-10 pb-20 space-y-10 max-w-[1600px] mx-auto animate-fadeIn custom-scrollbar">
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>

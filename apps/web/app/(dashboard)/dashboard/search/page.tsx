@@ -184,14 +184,14 @@ export default function SearchPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-[calc(100vh-5rem)] bg-background/50 backdrop-blur-3xl relative overflow-hidden animate-fadeIn">
+    <div className="flex flex-1 h-full bg-background/50 backdrop-blur-3xl relative overflow-hidden animate-fadeIn">
       {/* Background Decorative Glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 dark:bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/5 dark:bg-purple-500/5 rounded-full blur-[120px] translate-y-1/2 pointer-events-none" />
 
       {/* Chat History Sidebar - Premium Glass */}
       <div className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-80 glass border-r-0 flex flex-col transition-all duration-500 ease-in-out shadow-2xl`}>
+        } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-80 glass border-r border-black/10 dark:border-white/5 flex flex-col transition-all duration-500 ease-in-out shadow-2xl`}>
         <div className="p-6 border-b border-black/5 dark:border-white/5 flex items-center gap-3">
           <Button
             onClick={handleNewChat}
@@ -209,7 +209,7 @@ export default function SearchPage() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-          <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] mb-4 px-3">
+          <p className="text-[10px] font-black text-muted-foreground/40 dark:text-muted-foreground/60 uppercase tracking-[0.2em] mb-4 px-3">
             Neural History
           </p>
           {chats?.length === 0 ? (
@@ -272,9 +272,9 @@ export default function SearchPage() {
       {/* Main Experience */}
       <div className="flex-1 flex flex-col relative">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-10 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-10 custom-scrollbar relative">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full max-w-3xl mx-auto space-y-12">
+            <div className="flex flex-col items-center justify-center min-h-full max-w-5xl mx-auto space-y-12">
               <div className="relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-[60px] animate-brain-pulse" />
                 <div className="w-32 h-32 rounded-[2.5rem] bg-ai-gradient shadow-ai flex items-center justify-center relative z-10 scale-110">
@@ -316,7 +316,7 @@ export default function SearchPage() {
               </div>
             </div>
           ) : (
-            <div className="max-w-4xl mx-auto w-full space-y-12 pb-24">
+            <div className="max-w-6xl mx-auto w-full space-y-12 pb-40">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -399,8 +399,8 @@ export default function SearchPage() {
         </div>
 
         {/* Input Dock */}
-        <div className="absolute bottom-0 inset-x-0 p-6 sm:p-10 pointer-events-none">
-          <div className="max-w-4xl mx-auto pointer-events-auto">
+        <div className="absolute bottom-0 inset-x-0 p-4 sm:p-6 pb-6 sm:pb-8 pointer-events-none">
+          <div className="max-w-6xl mx-auto pointer-events-auto">
             <form onSubmit={handleSubmit} className="relative group">
               <div className="absolute -inset-1 bg-ai-gradient rounded-[2.5rem] blur opacity-10 group-focus-within:opacity-40 transition-opacity duration-500" />
               <div className="relative glass rounded-[2.5rem] p-2 flex items-center gap-2 border-black/5 dark:border-white/10 shadow-3xl">
@@ -422,7 +422,7 @@ export default function SearchPage() {
                   <Send className="h-6 w-6" />
                 </Button>
               </div>
-              <p className="text-[10px] text-center mt-4 font-black uppercase tracking-[0.3em] text-muted-foreground/30 px-4">
+              <p className="text-[10px] text-center mt-3 font-black uppercase tracking-[0.3em] text-muted-foreground/30 px-4">
                 AI can hallucinate. Verify critical insights with primary sources.
               </p>
             </form>
