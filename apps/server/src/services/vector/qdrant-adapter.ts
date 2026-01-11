@@ -91,19 +91,31 @@ export class QdrantAdapter implements VectorStoreAdapter {
     await this.ensureCollection(queryEmbedding.length);
 
     // Build filter if provided
+    // Filter out internal fields (starting with '_') and non-primitive values
     const qdrantFilter = filter
       ? {
-          must: Object.entries(filter).map(([key, value]) => ({
-            key,
-            match: { value },
-          })),
+          must: Object.entries(filter)
+            .filter(([key, value]) => {
+              // Skip internal fields (used for JS-side filtering)
+              if (key.startsWith('_')) return false;
+              // Skip array or object values (Qdrant match doesn't support these directly)
+              if (Array.isArray(value) || (typeof value === 'object' && value !== null)) return false;
+              return true;
+            })
+            .map(([key, value]) => ({
+              key,
+              match: { value },
+            })),
         }
       : undefined;
+    
+    // Don't pass empty filter
+    const effectiveFilter = qdrantFilter && qdrantFilter.must.length > 0 ? qdrantFilter : undefined;
 
     const results = await this.client.search(this.collectionName, {
       vector: queryEmbedding,
       limit: topK,
-      filter: qdrantFilter,
+      filter: effectiveFilter,
       with_payload: true,
     });
 
