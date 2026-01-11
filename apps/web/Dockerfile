@@ -21,7 +21,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build Next.js
-RUN npm run build --workspace=@search-pdf/web
+RUN npm run build --workspace=@fileai/web
 
 # Production image
 FROM base AS runner

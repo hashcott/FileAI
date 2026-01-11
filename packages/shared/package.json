@@ -1,5 +1,5 @@
 {
-  "name": "@search-pdf/shared",
+  "name": "@fileai/shared",
   "version": "1.0.0",
   "type": "module",
   "main": "./src/index.ts",

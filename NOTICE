@@ -1,0 +1,44 @@
+FileAI
+Copyright 2026 FileAI Contributors
+
+This product includes software developed by the FileAI project
+(https://github.com/hashcott/fileai).
+
+================================================================================
+
+ATTRIBUTION REQUIREMENTS
+
+If you use FileAI in your project, you must:
+
+1. Retain this NOTICE file in all copies or substantial portions of the Software
+2. Include the following attribution in your application's "About" page, 
+   documentation, or credits section:
+
+   "Powered by FileAI (https://github.com/hashcott/fileai)"
+
+3. If you modify the source code, you must clearly indicate the modifications
+   and retain the original copyright notices
+
+================================================================================
+
+THIRD-PARTY LICENSES
+
+This software includes the following third-party components:
+
+- LangChain.js (MIT License)
+  https://github.com/langchain-ai/langchainjs
+
+- Next.js (MIT License)
+  https://github.com/vercel/next.js
+
+- shadcn/ui (MIT License)
+  https://github.com/shadcn-ui/ui
+
+- tRPC (MIT License)
+  https://github.com/trpc/trpc
+
+- Qdrant Client (Apache 2.0 License)
+  https://github.com/qdrant/qdrant-js
+
+For a complete list of dependencies and their licenses, see package.json files
+in each application directory.

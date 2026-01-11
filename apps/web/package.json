@@ -1,5 +1,5 @@
 {
-  "name": "@search-pdf/web",
+  "name": "@fileai/web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -25,7 +25,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
-    "@search-pdf/shared": "*",
+    "@fileai/shared": "*",
     "@tanstack/react-query": "^5.17.9",
     "@trpc/client": "^11.0.0-rc.363",
     "@trpc/react-query": "^11.0.0-rc.363",

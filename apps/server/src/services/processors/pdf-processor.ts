@@ -1,4 +1,4 @@
-import { FileProcessor, ProcessedDocument } from "@search-pdf/shared";
+import { FileProcessor, ProcessedDocument } from "@fileai/shared";
 import pdf from "pdf-parse";
 
 export class PDFProcessor implements FileProcessor {

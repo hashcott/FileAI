@@ -1,7 +1,7 @@
 import { router, publicProcedure, adminProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { SystemConfigSchema } from "@search-pdf/shared";
+import { SystemConfigSchema } from "@fileai/shared";
 import { SystemConfig } from "../db/models/SystemConfig";
 
 export const configRouter = router({

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    transpilePackages: ["@search-pdf/shared"],
+    transpilePackages: ["@fileai/shared"],
     output: "standalone",
 };
 

@@ -1,4 +1,4 @@
-# Setup Guide - RAG Document Search System
+# Setup Guide - FileAI
 
 ## Quick Start
 
@@ -13,7 +13,7 @@
 
 ```bash
 git clone <your-repo>
-cd search-pdf
+cd fileai
 npm run setup
 ```
 
@@ -108,7 +108,7 @@ Services will be available at:
 
 ```env
 # Database
-MONGODB_URI=mongodb://localhost:27017/search-pdf
+MONGODB_URI=mongodb://localhost:27017/fileai
 
 # JWT Secret (CHANGE THIS!)
 JWT_SECRET=your-super-secret-key-change-this
@@ -126,7 +126,7 @@ STORAGE_TYPE=local # or s3, minio
 LOCAL_STORAGE_PATH=./uploads
 
 # S3/MinIO (if using)
-S3_BUCKET=search-pdf
+S3_BUCKET=fileai
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=
 S3_SECRET_ACCESS_KEY=

@@ -2,10 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { trpc } from "@/lib/trpc/client";
-import {
-    Card,
-    CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -146,8 +143,10 @@ export default function DocumentsPage() {
             }
         }
 
-        result.sort((a, b) => 
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        result.sort(
+            (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
         );
 
         return result;
@@ -247,7 +246,8 @@ export default function DocumentsPage() {
 
     const getFileType = (mimeType: string) => {
         if (mimeType.includes("pdf")) return "PDF";
-        if (mimeType.includes("word") || mimeType.includes("document")) return "DOC";
+        if (mimeType.includes("word") || mimeType.includes("document"))
+            return "DOC";
         if (mimeType.includes("xml")) return "XML";
         if (mimeType.includes("text")) return "TXT";
         return "FILE";
@@ -285,17 +285,36 @@ export default function DocumentsPage() {
         }
     };
 
-    const getVisibilityIcon = (visibility?: string, organizationId?: string) => {
+    const getVisibilityIcon = (
+        visibility?: string,
+        organizationId?: string
+    ) => {
         if (!organizationId) {
-            return <Lock className="h-3 w-3 text-muted-foreground" title="Personal" />;
+            return (
+                <span title="Personal">
+                    <Lock className="h-3 w-3 text-muted-foreground" />
+                </span>
+            );
         }
         switch (visibility) {
             case "private":
-                return <Lock className="h-3 w-3 text-destructive" title="Private" />;
+                return (
+                    <span title="Private">
+                        <Lock className="h-3 w-3 text-destructive" />
+                    </span>
+                );
             case "organization":
-                return <Users className="h-3 w-3 text-primary" title="Organization" />;
+                return (
+                    <span title="Organization">
+                        <Users className="h-3 w-3 text-primary" />
+                    </span>
+                );
             case "public":
-                return <Globe className="h-3 w-3 text-chart-2" title="Public" />;
+                return (
+                    <span title="Public">
+                        <Globe className="h-3 w-3 text-chart-2" />
+                    </span>
+                );
             default:
                 return null;
         }
@@ -311,7 +330,9 @@ export default function DocumentsPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold tracking-tight">Documents</h1>
+                    <h1 className="text-2xl font-semibold tracking-tight">
+                        Documents
+                    </h1>
                     <p className="text-muted-foreground mt-1 text-sm">
                         Manage your uploaded files and their processing status.
                     </p>
@@ -324,7 +345,11 @@ export default function DocumentsPage() {
                         disabled={isLoading}
                         className="rounded-lg h-9"
                     >
-                        <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+                        <RefreshCw
+                            className={`h-4 w-4 mr-2 ${
+                                isLoading ? "animate-spin" : ""
+                            }`}
+                        />
                         Refresh
                     </Button>
                     <Link href="/dashboard/upload">
@@ -366,10 +391,18 @@ export default function DocumentsPage() {
                                     <SelectValue placeholder="Status" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-card border-border rounded-lg">
-                                    <SelectItem value="all">All Status</SelectItem>
-                                    <SelectItem value="completed">Completed</SelectItem>
-                                    <SelectItem value="processing">Processing</SelectItem>
-                                    <SelectItem value="failed">Failed</SelectItem>
+                                    <SelectItem value="all">
+                                        All Status
+                                    </SelectItem>
+                                    <SelectItem value="completed">
+                                        Completed
+                                    </SelectItem>
+                                    <SelectItem value="processing">
+                                        Processing
+                                    </SelectItem>
+                                    <SelectItem value="failed">
+                                        Failed
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -384,7 +417,9 @@ export default function DocumentsPage() {
                                     <SelectValue placeholder="Type" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-card border-border rounded-lg">
-                                    <SelectItem value="all">All Types</SelectItem>
+                                    <SelectItem value="all">
+                                        All Types
+                                    </SelectItem>
                                     <SelectItem value="pdf">PDF</SelectItem>
                                     <SelectItem value="word">Word</SelectItem>
                                     <SelectItem value="xml">XML</SelectItem>
@@ -405,7 +440,9 @@ export default function DocumentsPage() {
                                 </SelectTrigger>
                                 <SelectContent className="bg-card border-border rounded-lg">
                                     <SelectItem value="all">All</SelectItem>
-                                    <SelectItem value="personal">Personal</SelectItem>
+                                    <SelectItem value="personal">
+                                        Personal
+                                    </SelectItem>
                                     {organizations?.map((org) => (
                                         <SelectItem key={org.id} value={org.id}>
                                             {org.name}
@@ -417,13 +454,21 @@ export default function DocumentsPage() {
                             <div className="flex items-center bg-accent border border-border rounded-lg p-1">
                                 <button
                                     onClick={() => setViewMode("table")}
-                                    className={`p-2 rounded ${viewMode === "table" ? "bg-background shadow-sm" : ""}`}
+                                    className={`p-2 rounded ${
+                                        viewMode === "table"
+                                            ? "bg-background shadow-sm"
+                                            : ""
+                                    }`}
                                 >
                                     <List className="h-4 w-4" />
                                 </button>
                                 <button
                                     onClick={() => setViewMode("grid")}
-                                    className={`p-2 rounded ${viewMode === "grid" ? "bg-background shadow-sm" : ""}`}
+                                    className={`p-2 rounded ${
+                                        viewMode === "grid"
+                                            ? "bg-background shadow-sm"
+                                            : ""
+                                    }`}
                                 >
                                     <Grid className="h-4 w-4" />
                                 </button>
@@ -465,7 +510,9 @@ export default function DocumentsPage() {
                 <Card className="bg-card border-border">
                     <CardContent className="p-12 text-center">
                         <Loader2 className="h-8 w-8 animate-spin mx-auto mb-3 text-primary" />
-                        <p className="text-sm text-muted-foreground">Loading documents...</p>
+                        <p className="text-sm text-muted-foreground">
+                            Loading documents...
+                        </p>
                     </CardContent>
                 </Card>
             ) : paginatedDocuments.length === 0 ? (
@@ -476,18 +523,22 @@ export default function DocumentsPage() {
                         </div>
                         <h3 className="font-medium mb-1">No documents found</h3>
                         <p className="text-sm text-muted-foreground mb-4">
-                            {searchQuery || filterStatus !== "all" || filterType !== "all"
+                            {searchQuery ||
+                            filterStatus !== "all" ||
+                            filterType !== "all"
                                 ? "Try adjusting your filters."
                                 : "Upload your first document to get started."}
                         </p>
-                        {!searchQuery && filterStatus === "all" && filterType === "all" && (
-                            <Link href="/dashboard/upload">
-                                <Button className="rounded-lg">
-                                    <Upload className="h-4 w-4 mr-2" />
-                                    Upload Document
-                                </Button>
-                            </Link>
-                        )}
+                        {!searchQuery &&
+                            filterStatus === "all" &&
+                            filterType === "all" && (
+                                <Link href="/dashboard/upload">
+                                    <Button className="rounded-lg">
+                                        <Upload className="h-4 w-4 mr-2" />
+                                        Upload Document
+                                    </Button>
+                                </Link>
+                            )}
                     </CardContent>
                 </Card>
             ) : viewMode === "table" ? (
@@ -498,28 +549,52 @@ export default function DocumentsPage() {
                                 <tr className="border-b border-border bg-accent">
                                     <th className="px-4 py-3 text-left w-10">
                                         <Checkbox
-                                            checked={selectedIds.size === paginatedDocuments.length && paginatedDocuments.length > 0}
+                                            checked={
+                                                selectedIds.size ===
+                                                    paginatedDocuments.length &&
+                                                paginatedDocuments.length > 0
+                                            }
                                             onCheckedChange={handleSelectAll}
                                         />
                                     </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Name</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase hidden sm:table-cell">Type</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase hidden md:table-cell">Size</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Status</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase hidden lg:table-cell">Date</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Actions</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
+                                        Name
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase hidden sm:table-cell">
+                                        Type
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase hidden md:table-cell">
+                                        Size
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
+                                        Status
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase hidden lg:table-cell">
+                                        Date
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
                                 {paginatedDocuments.map((doc) => (
                                     <tr
                                         key={doc.id}
-                                        className={`group hover:bg-accent transition-colors ${selectedIds.has(doc.id) ? "bg-primary/5" : ""}`}
+                                        className={`group hover:bg-accent transition-colors ${
+                                            selectedIds.has(doc.id)
+                                                ? "bg-primary/5"
+                                                : ""
+                                        }`}
                                     >
                                         <td className="px-4 py-3">
                                             <Checkbox
-                                                checked={selectedIds.has(doc.id)}
-                                                onCheckedChange={() => handleSelect(doc.id)}
+                                                checked={selectedIds.has(
+                                                    doc.id
+                                                )}
+                                                onCheckedChange={() =>
+                                                    handleSelect(doc.id)
+                                                }
                                             />
                                         </td>
                                         <td className="px-4 py-3">
@@ -532,11 +607,20 @@ export default function DocumentsPage() {
                                                         <p className="font-medium text-sm truncate max-w-[200px]">
                                                             {doc.filename}
                                                         </p>
-                                                        {getVisibilityIcon((doc as any).visibility, (doc as any).organizationId)}
+                                                        {getVisibilityIcon(
+                                                            (doc as any)
+                                                                .visibility,
+                                                            (doc as any)
+                                                                .organizationId
+                                                        )}
                                                     </div>
-                                                    {(doc as any).organizationId && (
+                                                    {(doc as any)
+                                                        .organizationId && (
                                                         <p className="text-xs text-muted-foreground mt-0.5">
-                                                            {getOrganizationName((doc as any).organizationId)}
+                                                            {getOrganizationName(
+                                                                (doc as any)
+                                                                    .organizationId
+                                                            )}
                                                         </p>
                                                     )}
                                                 </div>
@@ -551,7 +635,9 @@ export default function DocumentsPage() {
                                             {formatBytes(doc.size)}
                                         </td>
                                         <td className="px-4 py-3">
-                                            {getStatusBadge(doc.processingStatus)}
+                                            {getStatusBadge(
+                                                doc.processingStatus
+                                            )}
                                         </td>
                                         <td className="px-4 py-3 text-sm text-muted-foreground hidden lg:table-cell">
                                             {formatDate(doc.createdAt)}
@@ -561,25 +647,47 @@ export default function DocumentsPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    onClick={() => handleDownload(doc)}
+                                                    onClick={() =>
+                                                        handleDownload(doc)
+                                                    }
                                                     className="h-8 w-8 rounded-lg"
                                                 >
                                                     <Download className="h-4 w-4" />
                                                 </Button>
                                                 <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                                                    <DropdownMenuTrigger
+                                                        asChild
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="h-8 w-8 rounded-lg"
+                                                        >
                                                             <MoreVertical className="h-4 w-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-card border-border rounded-lg">
-                                                        <DropdownMenuItem onClick={() => handleDownload(doc)} className="rounded">
+                                                    <DropdownMenuContent
+                                                        align="end"
+                                                        className="bg-card border-border rounded-lg"
+                                                    >
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                handleDownload(
+                                                                    doc
+                                                                )
+                                                            }
+                                                            className="rounded"
+                                                        >
                                                             <Download className="h-4 w-4 mr-2" />
                                                             Download
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-border" />
                                                         <DropdownMenuItem
-                                                            onClick={() => handleDelete(doc.id)}
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    doc.id
+                                                                )
+                                                            }
                                                             className="text-destructive focus:text-destructive rounded"
                                                         >
                                                             <Trash2 className="h-4 w-4 mr-2" />
@@ -600,7 +708,11 @@ export default function DocumentsPage() {
                     {paginatedDocuments.map((doc) => (
                         <Card
                             key={doc.id}
-                            className={`bg-card border-border hover:border-primary/30 transition-colors cursor-pointer ${selectedIds.has(doc.id) ? "ring-1 ring-primary" : ""}`}
+                            className={`bg-card border-border hover:border-primary/30 transition-colors cursor-pointer ${
+                                selectedIds.has(doc.id)
+                                    ? "ring-1 ring-primary"
+                                    : ""
+                            }`}
                             onClick={() => handleSelect(doc.id)}
                         >
                             <CardContent className="p-4">
@@ -609,19 +721,38 @@ export default function DocumentsPage() {
                                         <FileText className="h-5 w-5 text-muted-foreground" />
                                     </div>
                                     <DropdownMenu>
-                                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                                        <DropdownMenuTrigger
+                                            asChild
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 rounded-lg"
+                                            >
                                                 <MoreVertical className="h-4 w-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="bg-card border-border rounded-lg">
-                                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleDownload(doc); }} className="rounded">
+                                        <DropdownMenuContent
+                                            align="end"
+                                            className="bg-card border-border rounded-lg"
+                                        >
+                                            <DropdownMenuItem
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDownload(doc);
+                                                }}
+                                                className="rounded"
+                                            >
                                                 <Download className="h-4 w-4 mr-2" />
                                                 Download
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator className="bg-border" />
                                             <DropdownMenuItem
-                                                onClick={(e) => { e.stopPropagation(); handleDelete(doc.id); }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDelete(doc.id);
+                                                }}
                                                 className="text-destructive focus:text-destructive rounded"
                                             >
                                                 <Trash2 className="h-4 w-4 mr-2" />
@@ -631,12 +762,18 @@ export default function DocumentsPage() {
                                     </DropdownMenu>
                                 </div>
 
-                                <h3 className="font-medium text-sm truncate mb-1">{doc.filename}</h3>
-                                <p className="text-xs text-muted-foreground mb-3">{formatBytes(doc.size)}</p>
-                                
+                                <h3 className="font-medium text-sm truncate mb-1">
+                                    {doc.filename}
+                                </h3>
+                                <p className="text-xs text-muted-foreground mb-3">
+                                    {formatBytes(doc.size)}
+                                </p>
+
                                 <div className="flex items-center justify-between">
                                     {getStatusBadge(doc.processingStatus)}
-                                    <span className="text-xs text-muted-foreground">{formatDate(doc.createdAt)}</span>
+                                    <span className="text-xs text-muted-foreground">
+                                        {formatDate(doc.createdAt)}
+                                    </span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -649,23 +786,33 @@ export default function DocumentsPage() {
                 <div className="flex items-center justify-between">
                     <p className="text-sm text-muted-foreground">
                         Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
-                        {Math.min(currentPage * ITEMS_PER_PAGE, filteredDocuments.length)}{" "}
+                        {Math.min(
+                            currentPage * ITEMS_PER_PAGE,
+                            filteredDocuments.length
+                        )}{" "}
                         of {filteredDocuments.length}
                     </p>
                     <div className="flex items-center gap-1">
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                            onClick={() =>
+                                setCurrentPage((p) => Math.max(1, p - 1))
+                            }
                             disabled={currentPage === 1}
                             className="h-8 rounded-lg"
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        {Array.from(
+                            { length: totalPages },
+                            (_, i) => i + 1
+                        ).map((page) => (
                             <Button
                                 key={page}
-                                variant={currentPage === page ? "default" : "outline"}
+                                variant={
+                                    currentPage === page ? "default" : "outline"
+                                }
                                 size="sm"
                                 onClick={() => setCurrentPage(page)}
                                 className="h-8 w-8 rounded-lg"
@@ -676,7 +823,11 @@ export default function DocumentsPage() {
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                            onClick={() =>
+                                setCurrentPage((p) =>
+                                    Math.min(totalPages, p + 1)
+                                )
+                            }
                             disabled={currentPage === totalPages}
                             className="h-8 rounded-lg"
                         >
@@ -686,7 +837,10 @@ export default function DocumentsPage() {
                 </div>
             )}
 
-            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+            <AlertDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+            >
                 <AlertDialogContent className="bg-card border-border rounded-xl">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Delete Document</AlertDialogTitle>
@@ -697,7 +851,9 @@ export default function DocumentsPage() {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
+                        <AlertDialogCancel className="rounded-lg">
+                            Cancel
+                        </AlertDialogCancel>
                         <AlertDialogAction
                             onClick={confirmDelete}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-lg"

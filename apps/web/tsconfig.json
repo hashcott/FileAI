@@ -26,10 +26,10 @@
       "@/*": [
         "./*"
       ],
-      "@search-pdf/server": [
+      "@fileai/server": [
         "../server/src/index.ts"
       ],
-      "@search-pdf/server/*": [
+      "@fileai/server/*": [
         "../server/src/*"
       ]
     }

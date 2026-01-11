@@ -1,4 +1,4 @@
-import { StorageAdapter } from "@search-pdf/shared";
+import { StorageAdapter } from "@fileai/shared";
 import { S3Adapter } from "./s3-adapter";
 import { LocalAdapter } from "./local-adapter";
 import { SystemConfig } from "../../db/models/SystemConfig";

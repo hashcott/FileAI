@@ -3,7 +3,7 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { getLLM } from "./llm-service";
 import { searchVectorStore } from "./vector-service";
-import { RAGResponse } from "@search-pdf/shared";
+import { RAGResponse } from "@fileai/shared";
 
 const RAG_PROMPT_TEMPLATE = `You are a helpful AI assistant that answers questions based on the provided context from documents.
 

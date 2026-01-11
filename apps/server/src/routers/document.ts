@@ -1,7 +1,7 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { FileUploadSchema, SearchResult } from "@search-pdf/shared";
+import { FileUploadSchema, SearchResult } from "@fileai/shared";
 import { Document } from "../db/models/Document";
 import { User } from "../db/models/User";
 import { processDocument } from "../services/document-processor";

@@ -1,4 +1,4 @@
-import { FileProcessor, ProcessedDocument } from "@search-pdf/shared";
+import { FileProcessor, ProcessedDocument } from "@fileai/shared";
 import { XMLParser } from "fast-xml-parser";
 
 export class XMLProcessor implements FileProcessor {

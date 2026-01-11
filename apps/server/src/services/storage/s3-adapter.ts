@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
-import { StorageAdapter } from "@search-pdf/shared";
+import { StorageAdapter } from "@fileai/shared";
 import { Readable } from "stream";
 
 interface S3Config {

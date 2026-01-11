@@ -1,4 +1,4 @@
-import { StorageAdapter } from "@search-pdf/shared";
+import { StorageAdapter } from "@fileai/shared";
 import * as fs from "fs/promises";
 import * as path from "path";
 

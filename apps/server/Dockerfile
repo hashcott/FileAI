@@ -21,7 +21,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build server
-RUN npm run build --workspace=@search-pdf/server
+RUN npm run build --workspace=@fileai/server
 
 # Production image
 FROM base AS runner

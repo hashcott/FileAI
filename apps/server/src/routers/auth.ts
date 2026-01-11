@@ -1,6 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { LoginSchema, CreateUserSchema } from "@search-pdf/shared";
+import { LoginSchema, CreateUserSchema } from "@fileai/shared";
 import { User } from "../db/models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";

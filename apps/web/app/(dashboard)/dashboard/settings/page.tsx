@@ -116,7 +116,7 @@ export default function SettingsPage() {
                 <div className="flex gap-2">
                   <Input
                     id="mongodb"
-                    defaultValue="mongodb://localhost:27017/search-pdf"
+                    defaultValue="mongodb://localhost:27017/fileai"
                     className="font-mono text-sm bg-accent border-border"
                   />
                   <Button variant="outline" size="icon" className="border-border">

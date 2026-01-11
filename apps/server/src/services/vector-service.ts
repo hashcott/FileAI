@@ -1,6 +1,6 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { getVectorStore } from "./vector";
-import { CHUNK_SIZE, CHUNK_OVERLAP } from "@search-pdf/shared";
+import { CHUNK_SIZE, CHUNK_OVERLAP } from "@fileai/shared";
 import { randomUUID } from "crypto";
 
 const textSplitter = new RecursiveCharacterTextSplitter({

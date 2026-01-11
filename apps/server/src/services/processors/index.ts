@@ -1,4 +1,4 @@
-import { FileProcessor } from "@search-pdf/shared";
+import { FileProcessor } from "@fileai/shared";
 import { PDFProcessor } from "./pdf-processor";
 import { WordProcessor } from "./word-processor";
 import { XMLProcessor } from "./xml-processor";

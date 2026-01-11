@@ -17,7 +17,7 @@ export default function SetupPage() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [config, setConfig] = useState({
-    database: { url: "mongodb://localhost:27017/search-pdf" },
+    database: { url: "mongodb://localhost:27017/fileai" },
     storage: {
       type: "local" as "s3" | "local" | "minio",
       config: {
@@ -93,7 +93,7 @@ export default function SetupPage() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Welcome to RAG Document Search
+            Welcome to FileAI
           </h1>
           <p className="text-gray-600">Let&apos;s set up your system</p>
         </div>
@@ -144,7 +144,7 @@ export default function SetupPage() {
                         database: { url: e.target.value },
                       })
                     }
-                    placeholder="mongodb://localhost:27017/search-pdf"
+                    placeholder="mongodb://localhost:27017/fileai"
                   />
                 </div>
               </div>

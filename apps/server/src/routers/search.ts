@@ -1,5 +1,5 @@
 import { router, protectedProcedure } from "../trpc";
-import { RAGQuerySchema, SearchQuerySchema } from "@search-pdf/shared";
+import { RAGQuerySchema, SearchQuerySchema } from "@fileai/shared";
 import { TRPCError } from "@trpc/server";
 import { performRAGQuery } from "../services/rag-service";
 import { searchVectorStore } from "../services/vector-service";

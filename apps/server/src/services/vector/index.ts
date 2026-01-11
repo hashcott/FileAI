@@ -1,4 +1,4 @@
-import { VectorStoreAdapter } from "@search-pdf/shared";
+import { VectorStoreAdapter } from "@fileai/shared";
 import { QdrantAdapter } from "./qdrant-adapter";
 import { SystemConfig } from "../../db/models/SystemConfig";
 

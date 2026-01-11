@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/search-pdf";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/fileai";
 
 export async function connectDatabase() {
   try {

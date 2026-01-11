@@ -1,5 +1,5 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { VectorStoreAdapter, VectorDocument, SearchResult } from "@search-pdf/shared";
+import { VectorStoreAdapter, VectorDocument, SearchResult } from "@fileai/shared";
 import { getEmbedding } from "../embedding-service";
 
 interface QdrantConfig {

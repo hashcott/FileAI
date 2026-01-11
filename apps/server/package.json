@@ -1,5 +1,5 @@
 {
-  "name": "@search-pdf/server",
+  "name": "@fileai/server",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +21,7 @@
     "@langchain/openai": "^1.2.0",
     "@langchain/textsplitters": "^1.0.1",
     "@qdrant/js-client-rest": "^1.7.0",
-    "@search-pdf/shared": "*",
+    "@fileai/shared": "*",
     "@trpc/server": "^11.0.0-rc.363",
     "@types/socket.io": "^3.0.2",
     "aws-sdk": "^2.1529.0",

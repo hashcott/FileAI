@@ -1,4 +1,4 @@
-# RAG Document Search System - Project Summary
+# FileAI - Project Summary
 
 ## ✅ Implementation Complete
 
@@ -7,7 +7,7 @@ All planned features have been successfully implemented following the architectu
 ## 🏗️ Project Structure
 
 ```
-search-pdf/
+fileai/
 ├── apps/
 │   ├── web/                          # Next.js 14 Frontend
 │   │   ├── app/
