@@ -37,6 +37,76 @@ interface Message {
   sources?: Source[];
 }
 
+/**
+ * Parse message content and convert [Source X] references to clickable links
+ */
+function MessageContent({
+  content,
+  sources,
+  onSourceClick,
+}: {
+  content: string;
+  sources?: Source[];
+  onSourceClick: (source: Source) => void;
+}) {
+  if (!sources || sources.length === 0) {
+    return <p className="whitespace-pre-wrap text-sm">{content}</p>;
+  }
+
+  // Regex to match [Source X] patterns (case insensitive)
+  const sourceRefPattern = /\[Source\s*(\d+)\]/gi;
+  const parts: (string | { sourceIndex: number })[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = sourceRefPattern.exec(content)) !== null) {
+    // Add text before the match
+    if (match.index > lastIndex) {
+      parts.push(content.slice(lastIndex, match.index));
+    }
+    // Add source reference with 1-based index
+    const sourceNum = parseInt(match[1], 10);
+    parts.push({ sourceIndex: sourceNum });
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < content.length) {
+    parts.push(content.slice(lastIndex));
+  }
+
+  return (
+    <p className="whitespace-pre-wrap text-sm">
+      {parts.map((part, idx) => {
+        if (typeof part === 'string') {
+          return <span key={idx}>{part}</span>;
+        }
+        // Source reference - convert to 0-based index for array access
+        const source = sources[part.sourceIndex - 1];
+        if (!source) {
+          return (
+            <span key={idx} className="text-muted-foreground">
+              [Source {part.sourceIndex}]
+            </span>
+          );
+        }
+        const filename = (source.metadata?.filename as string) || source.filename || 'Document';
+        return (
+          <button
+            key={idx}
+            onClick={() => onSourceClick(source)}
+            className="bg-primary/10 text-primary hover:bg-primary/20 mx-0.5 inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium transition-colors"
+            title={`Click to view: ${filename}`}
+          >
+            <FileText className="h-3 w-3" />
+            Source {part.sourceIndex}
+          </button>
+        );
+      })}
+    </p>
+  );
+}
+
 export default function SearchPage() {
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -360,7 +430,15 @@ export default function SearchPage() {
                           : 'bg-card border-border border'
                       }`}
                     >
-                      <p className="whitespace-pre-wrap text-sm">{message.content}</p>
+                      {message.role === 'assistant' ? (
+                        <MessageContent
+                          content={message.content}
+                          sources={message.sources}
+                          onSourceClick={handlePreview}
+                        />
+                      ) : (
+                        <p className="whitespace-pre-wrap text-sm">{message.content}</p>
+                      )}
                     </div>
 
                     {message.sources && message.sources.length > 0 && (
@@ -378,6 +456,9 @@ export default function SearchPage() {
                             >
                               <div className="mb-2 flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
+                                  <span className="bg-primary/10 text-primary flex h-5 w-5 items-center justify-center rounded text-xs font-medium">
+                                    {idx + 1}
+                                  </span>
                                   <FileText className="text-primary h-3.5 w-3.5" />
                                   <Eye className="text-muted-foreground h-3 w-3 opacity-0 transition-opacity group-hover/source:opacity-100" />
                                 </div>
