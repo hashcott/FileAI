@@ -4,7 +4,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/lib/stores";
 import {
-    FileText,
     Search,
     Upload,
     Settings,

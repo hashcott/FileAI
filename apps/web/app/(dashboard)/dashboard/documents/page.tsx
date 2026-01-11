@@ -40,7 +40,6 @@ import {
     Grid,
     List,
     CheckCircle,
-    Clock,
     AlertCircle,
     RefreshCw,
     Upload,
@@ -198,7 +197,7 @@ export default function DocumentsPage() {
         setDeleteTarget(null);
     };
 
-    const handleDownload = async (doc: any) => {
+    const handleDownload = async (doc: { id: string; filename: string }) => {
         try {
             const token = localStorage.getItem("auth_token");
             if (!token) {
@@ -608,17 +607,17 @@ export default function DocumentsPage() {
                                                             {doc.filename}
                                                         </p>
                                                         {getVisibilityIcon(
-                                                            (doc as any)
+                                                            (doc as { visibility?: string })
                                                                 .visibility,
-                                                            (doc as any)
+                                                            (doc as { organizationId?: string })
                                                                 .organizationId
                                                         )}
                                                     </div>
-                                                    {(doc as any)
+                                                    {(doc as { organizationId?: string })
                                                         .organizationId && (
                                                         <p className="text-xs text-muted-foreground mt-0.5">
                                                             {getOrganizationName(
-                                                                (doc as any)
+                                                                (doc as { organizationId?: string })
                                                                     .organizationId
                                                             )}
                                                         </p>

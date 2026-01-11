@@ -20,8 +20,8 @@ export default function RegisterPage() {
     const setAuth = useAuthStore((state) => state.setAuth);
     
     const registerMutation = trpc.auth.register.useMutation({
-        onSuccess: (data) => {
-            setAuth(data.user as any, data.token);
+        onSuccess: (data: { user: Parameters<typeof setAuth>[0]; token: string }) => {
+            setAuth(data.user, data.token);
             toast({
                 title: "Success",
                 description: "Account created successfully",

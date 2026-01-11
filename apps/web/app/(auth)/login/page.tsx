@@ -19,8 +19,8 @@ export default function LoginPage() {
     const setAuth = useAuthStore((state) => state.setAuth);
     
     const loginMutation = trpc?.auth?.login?.useMutation?.({
-        onSuccess: (data: { user: unknown; token: string }) => {
-            setAuth(data.user as any, data.token);
+        onSuccess: (data: { user: Parameters<typeof setAuth>[0]; token: string }) => {
+            setAuth(data.user, data.token);
             toast({
                 title: "Success",
                 description: "Logged in successfully",

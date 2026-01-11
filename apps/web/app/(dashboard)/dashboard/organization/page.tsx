@@ -170,7 +170,7 @@ export default function OrganizationPage() {
                                 <Label htmlFor="type">Type</Label>
                                 <Select
                                     value={newOrg.type}
-                                    onValueChange={(value: any) =>
+                                    onValueChange={(value: "company" | "school" | "team" | "personal") =>
                                         setNewOrg({ ...newOrg, type: value })
                                     }
                                 >

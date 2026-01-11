@@ -43,7 +43,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     ArrowLeft,
-    Building2,
     Users,
     Settings,
     UserPlus,
@@ -87,7 +86,7 @@ export default function OrganizationDetailPage() {
     const [inviteEmail, setInviteEmail] = useState("");
     const [inviteRole, setInviteRole] = useState<"admin" | "editor" | "member" | "viewer" | "guest">("member");
 
-    const { data: org, isLoading, refetch: refetchOrg } = trpc.organization.getById.useQuery({ id: id as string });
+    const { data: org, isLoading } = trpc.organization.getById.useQuery({ id: id as string });
     const { data: members, refetch: refetchMembers } = trpc.organization.listMembers.useQuery({ organizationId: id as string });
     const { data: permissions } = trpc.organization.getMyPermissions.useQuery({ organizationId: id as string });
 
@@ -271,7 +270,7 @@ export default function OrganizationDetailPage() {
                                                 <Label>Role</Label>
                                                 <Select
                                                     value={inviteRole}
-                                                    onValueChange={(value: any) => setInviteRole(value)}
+                                                    onValueChange={(value: "admin" | "editor" | "member" | "viewer" | "guest") => setInviteRole(value)}
                                                 >
                                                     <SelectTrigger>
                                                         <SelectValue />
@@ -341,7 +340,7 @@ export default function OrganizationDetailPage() {
                                             {canUpdateMembers && member.role !== "owner" ? (
                                                 <Select
                                                     value={member.role}
-                                                    onValueChange={(value: any) =>
+                                                    onValueChange={(value: "admin" | "editor" | "member" | "viewer" | "guest") =>
                                                         updateRoleMutation.mutate({
                                                             organizationId: id as string,
                                                             userId: member.userId,

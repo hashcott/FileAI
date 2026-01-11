@@ -4,9 +4,7 @@ import { useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-    Search,
     Send,
     FileText,
     MessageSquare,
@@ -26,7 +24,7 @@ interface Source {
     id?: string;
     content?: string;
     score?: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     filename?: string;
     documentId?: string;
 }
@@ -40,7 +38,6 @@ interface Message {
 export default function SearchPage() {
     const { toast } = useToast();
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const messagesContainerRef = useRef<HTMLDivElement>(null);
     const shouldScrollRef = useRef(false);
     const prevMessagesLengthRef = useRef(0);
 
@@ -161,7 +158,7 @@ export default function SearchPage() {
             addMessage({
                 role: "assistant",
                 content: result.message,
-                sources: result.sources as any,
+                sources: result.sources as Source[],
             });
 
             refetchChats();
@@ -408,13 +405,14 @@ export default function SearchPage() {
                                                                                 ).toFixed(
                                                                                     0
                                                                                 )}
+
                                                                                 %
                                                                             </span>
                                                                         </div>
                                                                         <p className="text-xs text-muted-foreground truncate mb-1">
-                                                                            {source
+                                                                            {(source
                                                                                 .metadata
-                                                                                ?.filename ||
+                                                                                ?.filename as string) ||
                                                                                 source.filename ||
                                                                                 "Document"}
                                                                         </p>

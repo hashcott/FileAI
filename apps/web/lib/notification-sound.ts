@@ -6,7 +6,7 @@ function getAudioContext(): AudioContext | null {
     
     try {
         if (!audioContext) {
-            audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
         }
         
         // Resume context if suspended (browser autoplay policy)

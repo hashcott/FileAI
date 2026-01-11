@@ -10,7 +10,12 @@ import { formatDate } from "@/lib/utils";
 
 export default function FilesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<Array<{
+    content: string;
+    score: number;
+    metadata: { filename?: string };
+    document?: { createdAt: string };
+  }>>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 

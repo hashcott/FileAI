@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle } from "lucide-react";
 
@@ -62,7 +61,7 @@ export default function SetupPage() {
   });
 
   const handleFinish = () => {
-    saveMutation.mutate(config as any);
+    saveMutation.mutate(config as Parameters<typeof saveMutation.mutate>[0]);
   };
 
   const steps = [
@@ -157,7 +156,7 @@ export default function SetupPage() {
                   <Label htmlFor="storageType">Storage Type</Label>
                   <Select
                     value={config.storage.type}
-                    onValueChange={(value: any) =>
+                    onValueChange={(value: "s3" | "local" | "minio") =>
                       setConfig({
                         ...config,
                         storage: { ...config.storage, type: value },
@@ -204,7 +203,7 @@ export default function SetupPage() {
                   <Label htmlFor="vectorType">Vector Database</Label>
                   <Select
                     value={config.vectorDB.type}
-                    onValueChange={(value: any) =>
+                    onValueChange={(value: "qdrant" | "meilisearch" | "mongodb") =>
                       setConfig({
                         ...config,
                         vectorDB: { ...config.vectorDB, type: value },
@@ -273,7 +272,7 @@ export default function SetupPage() {
                   <Label htmlFor="llmProvider">Provider</Label>
                   <Select
                     value={config.llm.provider}
-                    onValueChange={(value: any) =>
+                    onValueChange={(value: "ollama" | "openai") =>
                       setConfig({
                         ...config,
                         llm: { ...config.llm, provider: value },
@@ -335,7 +334,7 @@ export default function SetupPage() {
                   <Label htmlFor="embeddingProvider">Provider</Label>
                   <Select
                     value={config.embedding.provider}
-                    onValueChange={(value: any) =>
+                    onValueChange={(value: "ollama" | "openai") =>
                       setConfig({
                         ...config,
                         embedding: { ...config.embedding, provider: value },
