@@ -45,7 +45,7 @@ export default function SettingsPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
           <p className="text-muted-foreground mt-1 text-sm">
-            Configure your RAG system settings
+            Configure your FileAI system settings
           </p>
         </div>
         <Button

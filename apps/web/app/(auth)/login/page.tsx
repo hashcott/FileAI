@@ -6,7 +6,8 @@ import { trpc } from "@/lib/trpc/client";
 import { useAuthStore } from "@/lib/stores";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { Leaf, Mail, Lock, Eye, EyeOff, ArrowRight, Search, Zap, Shield, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Search, Zap, Shield, Loader2 } from "lucide-react";
+import { Logo, LogoIcon } from "@/components/ui/logo";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -53,13 +54,8 @@ export default function LoginPage() {
 
                 <div className="relative z-10 flex flex-col justify-center px-16 text-background">
                     {/* Logo */}
-                    <div className="flex items-center gap-3 mb-12">
-                        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
-                            <Leaf className="w-7 h-7 text-primary-foreground" />
-                        </div>
-                        <span className="text-2xl font-semibold tracking-tight">
-                            DocuAI
-                        </span>
+                    <div className="mb-12">
+                        <Logo size="lg" className="text-background" />
                     </div>
 
                     <h1 className="text-4xl font-semibold mb-4 leading-tight">
@@ -105,11 +101,8 @@ export default function LoginPage() {
             <div className="flex-1 flex items-center justify-center p-8 lg:p-16">
                 <div className="w-full max-w-[400px]">
                     {/* Mobile Logo */}
-                    <div className="flex items-center gap-3 mb-8 lg:hidden">
-                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                            <Leaf className="w-5 h-5 text-primary-foreground" />
-                        </div>
-                        <span className="text-xl font-semibold">DocuAI</span>
+                    <div className="mb-8 lg:hidden">
+                        <Logo size="md" />
                     </div>
 
                     {/* Welcome Text */}

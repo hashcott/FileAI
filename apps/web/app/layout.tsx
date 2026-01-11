@@ -28,8 +28,11 @@ const inconsolata = Inconsolata({
 });
 
 export const metadata: Metadata = {
-  title: "DocuAI - Intelligent Document Search",
-  description: "AI-powered document search and analysis with RAG technology",
+  title: "FileAI - Intelligent Document Search",
+  description: "AI-powered document management and search with RAG technology",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

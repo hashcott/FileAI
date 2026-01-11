@@ -20,8 +20,8 @@ import {
     Building2,
     Moon,
     Sun,
-    Leaf,
 } from "lucide-react";
+import { LogoIcon } from "@/components/ui/logo";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -164,16 +164,14 @@ export default function DashboardLayout({
                 {/* Logo Section */}
                 <div className={`flex items-center h-16 border-b border-border ${sidebarOpen ? "justify-between px-5" : "justify-center px-0"}`}>
                     <div className={`flex items-center ${sidebarOpen ? "gap-3" : "gap-0"}`}>
-                        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-                            <Leaf className="h-5 w-5 text-primary-foreground" />
-                        </div>
+                        <LogoIcon size={36} className="flex-shrink-0" />
                         {sidebarOpen && (
                             <div className="animate-fadeIn">
                                 <h1 className="font-semibold text-base tracking-tight text-foreground">
-                                    DocuAI
+                                    FileAI
                                 </h1>
                                 <p className="text-[10px] text-muted-foreground/60 font-medium tracking-wide">
-                                    Enterprise
+                                    Smart Documents
                                 </p>
                             </div>
                         )}
