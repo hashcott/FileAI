@@ -1,4 +1,10 @@
-import { AbilityBuilder, createMongoAbility, MongoAbility, ForcedSubject } from '@casl/ability';
+import {
+  AbilityBuilder,
+  createMongoAbility,
+  MongoAbility,
+  ForcedSubject,
+  detectSubjectType,
+} from '@casl/ability';
 import {
   IMembership,
   MemberRole,
@@ -123,7 +129,20 @@ export function defineAbilityFor(context: AbilityContext): AppAbility {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   can('manage', 'Chat', { userId: context.userId } as any);
 
-  return build();
+  return build({
+    detectSubjectType: (item) => {
+      if (item && typeof item === 'object') {
+        if ('__typename' in item) {
+          return item.__typename as Subjects;
+        }
+        if ('__caslSubjectType__' in item) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (item as any).__caslSubjectType__ as Subjects;
+        }
+      }
+      return detectSubjectType(item) as Subjects;
+    },
+  });
 }
 
 /**
@@ -211,5 +230,12 @@ export function definePublicAbility(): AppAbility {
   // Public users cannot do anything by default
   cannot('manage', 'all');
 
-  return build();
+  return build({
+    detectSubjectType: (item) => {
+      if (item && typeof item === 'object' && '__typename' in item) {
+        return item.__typename as Subjects;
+      }
+      return detectSubjectType(item) as Subjects;
+    },
+  });
 }

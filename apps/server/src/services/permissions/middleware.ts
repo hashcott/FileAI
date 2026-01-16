@@ -58,10 +58,31 @@ export async function authorize(
     // MongoAbility will match the subject object against the defined conditions
     const subject = {
       __typename: resource,
+      __caslSubjectType__: resource, // Fallback for CASL subject detection
       organizationId: orgId,
     };
+    
+    // Debug logging
+    console.log(`[AUTH_DEBUG_${Date.now()}] Authorize check: User ${userId} attempting to ${action} ${resource}`);
+    console.log('Subject:', JSON.stringify(subject));
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     canAccess = ability.can(action as PermissionAction, subject as any);
+    
+    if (!canAccess) {
+      const dbName = mongoose.connection.name;
+      const memberships = await Membership.find({ userId, status: 'active' });
+      const roles = memberships.map(m => m.role).join(', ');
+
+      console.warn(`[AUTH_FAILURE] Authorization failed for user ${userId} on ${resource}`);
+      console.warn(`[AUTH_FAILURE] DB: ${dbName}, Roles: [${roles}]`);
+      console.warn('Ability rules:', JSON.stringify(ability.rules));
+
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: `You don't have permission to ${action} this ${resource.toLowerCase()}. Your roles: [${roles || 'none'}].`,
+      });
+    }
   } else {
     // No conditions - check without conditions
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

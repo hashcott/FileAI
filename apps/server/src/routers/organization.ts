@@ -272,6 +272,15 @@ export const organizationRouter = router({
     }),
 
   // Invite member
+  /**
+   * Invite a new member to the organization.
+   * 
+   * Permissions:
+   * - Requires 'invite' action on 'Member' resource.
+   * - 'owner' and 'admin' roles have this permission by default.
+   * 
+   * @throws TRPCError (FORBIDDEN) if user lacks permission.
+   */
   inviteMember: protectedProcedure.input(InviteMemberSchema).mutation(async ({ input, ctx }) => {
     await authorize(ctx.userId!, 'invite', 'Member', {
       organizationId: input.organizationId,
