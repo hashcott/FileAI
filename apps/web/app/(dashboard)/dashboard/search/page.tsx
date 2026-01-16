@@ -16,11 +16,17 @@ import {
   X,
   Menu,
   Eye,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { FilePreviewDialog } from '@/components/ui/file-preview-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/lib/utils';
 import { useChatStore, useUIStore, useWebSocketStore } from '@/lib/stores';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import remarkGfm from 'remark-gfm';
 
 interface Source {
   id?: string;
@@ -37,8 +43,29 @@ interface Message {
   sources?: Source[];
 }
 
+function CopyButton({ content }: { content: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="p-1.5 rounded-md bg-zinc-700/50 hover:bg-zinc-700 text-zinc-200 hover:text-white transition-colors"
+      title="Copy code"
+    >
+      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+    </button>
+  );
+}
+
 /**
  * Parse message content and convert [Source X] references to clickable links
+ * Renders markdown and code blocks
  */
 function MessageContent({
   content,
@@ -49,61 +76,99 @@ function MessageContent({
   sources?: Source[];
   onSourceClick: (source: Source) => void;
 }) {
-  if (!sources || sources.length === 0) {
-    return <p className="whitespace-pre-wrap text-sm">{content}</p>;
-  }
-
-  // Regex to match [Source X] patterns (case insensitive)
-  const sourceRefPattern = /\[Source\s*(\d+)\]/gi;
-  const parts: (string | { sourceIndex: number })[] = [];
-  let lastIndex = 0;
-  let match;
-
-  while ((match = sourceRefPattern.exec(content)) !== null) {
-    // Add text before the match
-    if (match.index > lastIndex) {
-      parts.push(content.slice(lastIndex, match.index));
-    }
-    // Add source reference with 1-based index
-    const sourceNum = parseInt(match[1], 10);
-    parts.push({ sourceIndex: sourceNum });
-    lastIndex = match.index + match[0].length;
-  }
-
-  // Add remaining text
-  if (lastIndex < content.length) {
-    parts.push(content.slice(lastIndex));
-  }
+  // Preprocess content to convert [Source X] to markdown links
+  const processedContent = content.replace(
+    /\[Source\s*(\d+)\]/gi,
+    (_, id) => `[[Source ${id}]](source:${id})`
+  );
 
   return (
-    <p className="whitespace-pre-wrap text-sm">
-      {parts.map((part, idx) => {
-        if (typeof part === 'string') {
-          return <span key={idx}>{part}</span>;
-        }
-        // Source reference - convert to 0-based index for array access
-        const source = sources[part.sourceIndex - 1];
-        if (!source) {
+    <div className="text-sm break-words">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          p: ({ children }) => <p className="mb-2 last:mb-0 whitespace-pre-wrap break-words">{children}</p>,
+        ul: ({ children }) => <ul className="list-disc pl-4 mb-2">{children}</ul>,
+        ol: ({ children }) => <ol className="list-decimal pl-4 mb-2">{children}</ol>,
+        h1: ({ children }) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+        h2: ({ children }) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+        h3: ({ children }) => <h3 className="text-md font-bold mb-2">{children}</h3>,
+        blockquote: ({ children }) => (
+          <blockquote className="border-l-2 border-primary/50 pl-4 italic mb-2">
+            {children}
+          </blockquote>
+        ),
+        a: ({ href, children, ...props }) => {
+          if (href?.startsWith('source:')) {
+            const sourceId = parseInt(href.split(':')[1], 10);
+            const source = sources?.[sourceId - 1];
+            
+            // If source is invalid/missing, just render text
+            if (!source) return <span>[Source {sourceId}]</span>;
+
+            const filename = (source.metadata?.filename as string) || source.filename || 'Document';
+
+            return (
+              <button
+                onClick={() => onSourceClick(source)}
+                className="bg-primary/10 text-primary hover:bg-primary/20 mx-0.5 inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium transition-colors align-middle"
+                title={`Click to view: ${filename}`}
+              >
+                <FileText className="h-3 w-3" />
+                Source {sourceId}
+              </button>
+            );
+          }
           return (
-            <span key={idx} className="text-muted-foreground">
-              [Source {part.sourceIndex}]
-            </span>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+              {...props}
+            >
+              {children}
+            </a>
           );
-        }
-        const filename = (source.metadata?.filename as string) || source.filename || 'Document';
-        return (
-          <button
-            key={idx}
-            onClick={() => onSourceClick(source)}
-            className="bg-primary/10 text-primary hover:bg-primary/20 mx-0.5 inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium transition-colors"
-            title={`Click to view: ${filename}`}
-          >
-            <FileText className="h-3 w-3" />
-            Source {part.sourceIndex}
-          </button>
-        );
-      })}
-    </p>
+        },
+        code({ className, children, ...props }: React.ComponentPropsWithoutRef<'code'>) {
+          const inline = !className?.includes('language-');
+          const match = /language-(\w+)/.exec(className || '');
+          
+          if (inline || !match) {
+            return (
+              <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono" {...props}>
+                {children}
+              </code>
+            );
+          }
+
+          return (
+            <div className="relative group my-2 rounded-lg overflow-x-auto">
+              <div className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                <CopyButton content={String(children).replace(/\n$/, '')} />
+              </div>
+              <SyntaxHighlighter
+                style={vscDarkPlus as any}
+                language={match[1]}
+                PreTag="div"
+                customStyle={{
+                  margin: 0,
+                  borderRadius: '0.5rem',
+                  fontSize: '0.875rem',
+                }}
+                {...props}
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            </div>
+          );
+        },
+      }}
+    >
+      {processedContent}
+    </ReactMarkdown>
+    </div>
   );
 }
 
@@ -362,23 +427,23 @@ export default function SearchPage() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="relative flex flex-1 flex-col">
+      <div className="relative flex flex-1 flex-col h-full overflow-hidden">
         {/* Messages */}
-        <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto p-6">
+        <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto p-4 md:p-6 min-h-0">
           {messages.length === 0 ? (
             <div className="mx-auto flex min-h-full max-w-2xl flex-col items-center justify-center space-y-8">
-              <div className="bg-primary flex h-20 w-20 items-center justify-center rounded-2xl">
-                <Sparkles className="text-primary-foreground h-10 w-10" />
+              <div className="bg-primary flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-2xl">
+                <Sparkles className="text-primary-foreground h-8 w-8 md:h-10 md:w-10" />
               </div>
 
-              <div className="space-y-2 text-center">
-                <h2 className="text-2xl font-semibold">Chat with your documents</h2>
-                <p className="text-muted-foreground">
+              <div className="space-y-2 text-center px-4">
+                <h2 className="text-xl md:text-2xl font-semibold">Chat with your documents</h2>
+                <p className="text-muted-foreground text-sm md:text-base">
                   Ask questions about your uploaded files and get AI-powered answers.
                 </p>
               </div>
 
-              <div className="grid w-full max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="grid w-full max-w-lg grid-cols-1 gap-3 sm:grid-cols-2 px-4">
                 {[
                   'Summarize the key points',
                   'What are the main risks?',
@@ -396,37 +461,37 @@ export default function SearchPage() {
               </div>
             </div>
           ) : (
-            <div className="mx-auto w-full max-w-4xl space-y-6 pb-32">
+            <div className="mx-auto w-full max-w-4xl space-y-6">
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex gap-4 ${
+                  className={`flex gap-3 md:gap-4 ${
                     message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                   }`}
                 >
                   <div
-                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg ${
+                    className={`flex h-8 w-8 md:h-9 md:w-9 flex-shrink-0 items-center justify-center rounded-lg ${
                       message.role === 'assistant'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-accent text-muted-foreground'
                     }`}
                   >
                     {message.role === 'assistant' ? (
-                      <Bot className="h-5 w-5" />
+                      <Bot className="h-4 w-4 md:h-5 md:w-5" />
                     ) : (
-                      <User className="h-5 w-5" />
+                      <User className="h-4 w-4 md:h-5 md:w-5" />
                     )}
                   </div>
 
                   <div
-                    className={`flex-1 space-y-3 ${
+                    className={`flex-1 space-y-3 min-w-0 ${
                       message.role === 'user' ? 'text-right' : 'text-left'
                     }`}
                   >
                     <div
-                      className={`inline-block max-w-[85%] rounded-xl p-4 ${
+                      className={`w-fit max-w-[95%] md:max-w-[95%] rounded-xl p-3 md:p-4 text-left ${
                         message.role === 'user'
-                          ? 'bg-primary text-primary-foreground'
+                          ? 'bg-primary text-primary-foreground ml-auto'
                           : 'bg-card border-border border'
                       }`}
                     >
@@ -437,7 +502,7 @@ export default function SearchPage() {
                           onSourceClick={handlePreview}
                         />
                       ) : (
-                        <p className="whitespace-pre-wrap text-sm">{message.content}</p>
+                        <p className="whitespace-pre-wrap text-sm text-left break-words">{message.content}</p>
                       )}
                     </div>
 
@@ -519,7 +584,7 @@ export default function SearchPage() {
         </div>
 
         {/* Input Area */}
-        <div className="bg-background border-border absolute inset-x-0 bottom-0 border-t p-4">
+        <div className="bg-background border-border border-t p-4 shrink-0 z-10">
           <div className="mx-auto max-w-4xl">
             <form onSubmit={handleSubmit} className="flex items-center gap-3">
               <div className="relative flex-1">
