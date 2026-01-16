@@ -299,24 +299,24 @@ export default function OrganizationDetailPage() {
       </div>
 
       <Tabs defaultValue="members" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 gap-2 md:grid-cols-4 h-auto rounded-lg bg-white p-1 shadow-sm dark:bg-slate-800">
+        <TabsList className="grid w-full grid-cols-1 gap-2 md:grid-cols-4 h-auto rounded-lg bg-white p-1 shadow-sm dark:bg-slate-800">
           <TabsTrigger
             value="members"
-            className="w-full justify-start data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <Users className="mr-2 h-4 w-4" />
             Members
           </TabsTrigger>
           <TabsTrigger
             value="permissions"
-            className="w-full justify-start data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <Shield className="mr-2 h-4 w-4" />
             My Permissions
           </TabsTrigger>
           <TabsTrigger
             value="role-permissions"
-            className="w-full justify-start data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <Info className="mr-2 h-4 w-4" />
             Role Reference
@@ -324,7 +324,7 @@ export default function OrganizationDetailPage() {
           {canUpdateOrg && (
             <TabsTrigger
               value="settings"
-              className="w-full justify-start data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
+              className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <Settings className="mr-2 h-4 w-4" />
               Settings

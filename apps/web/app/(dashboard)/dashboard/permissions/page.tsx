@@ -204,16 +204,16 @@ export default function PermissionsPage() {
         </div>
 
         <Tabs defaultValue="roles" className="space-y-6">
-          <TabsList className="bg-background border shadow-sm">
-            <TabsTrigger value="roles" className="gap-2">
+          <TabsList className="grid w-full grid-cols-1 gap-2 md:grid-cols-3 h-auto bg-background border shadow-sm p-1">
+            <TabsTrigger value="roles" className="w-full justify-start gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Crown className="h-4 w-4" />
               Roles
             </TabsTrigger>
-            <TabsTrigger value="matrix" className="gap-2">
+            <TabsTrigger value="matrix" className="w-full justify-start gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Lock className="h-4 w-4" />
               Permission Matrix
             </TabsTrigger>
-            <TabsTrigger value="resources" className="gap-2">
+            <TabsTrigger value="resources" className="w-full justify-start gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Key className="h-4 w-4" />
               Resources
             </TabsTrigger>
@@ -329,7 +329,7 @@ export default function PermissionsPage() {
                           <td className="px-3 py-4 text-center"><PermissionCell value={row.editor} /></td>
                           <td className="px-3 py-4 text-center"><PermissionCell value={row.member} /></td>
                           <td className="px-3 py-4 text-center"><PermissionCell value={row.viewer} /></td>
-                          <td className="px-3 py-4 text-center"><PermissionCell value={row.guest} /></td>
+                          <td className="px-3 py-4 text-center"><PermissionCell value={row.guest as boolean | 'shared'} /></td>
                         </tr>
                       ))}
                     </tbody>

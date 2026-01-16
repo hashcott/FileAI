@@ -56,31 +56,31 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="database" className="space-y-4">
-        <TabsList className="bg-accent border-border rounded-lg border p-1">
+        <TabsList className="grid w-full grid-cols-1 gap-2 md:grid-cols-4 h-auto bg-accent border-border rounded-lg border p-1">
           <TabsTrigger
             value="database"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
           >
             <Database className="mr-2 h-4 w-4" />
             Database
           </TabsTrigger>
           <TabsTrigger
             value="storage"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
           >
             <HardDrive className="mr-2 h-4 w-4" />
             Storage
           </TabsTrigger>
           <TabsTrigger
             value="llm"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
           >
             <Bot className="mr-2 h-4 w-4" />
             LLM
           </TabsTrigger>
           <TabsTrigger
             value="api"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
+            className="w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md"
           >
             <Key className="mr-2 h-4 w-4" />
             API Keys
