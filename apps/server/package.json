@@ -12,7 +12,8 @@
     "lint:fix": "eslint src/ --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json}\"",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "reset-data": "tsx src/scripts/reset-data.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.478.0",

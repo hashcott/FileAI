@@ -22,33 +22,10 @@ export default function SetupPage() {
   const router = useRouter();
   const { toast } = useToast();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const logout = useAuthStore((state) => state.logout);
   const { data: initData, isLoading: initLoading } = trpc.config.isInitialized.useQuery();
 
-  // Redirect if already initialized
-  useEffect(() => {
-    if (!initLoading && initData?.isInitialized) {
-      router.push('/dashboard');
-    }
-  }, [initData, initLoading, router]);
-
   const [currentStep, setCurrentStep] = useState(0);
-
-  // Show loading state while checking initialization
-  if (initLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render setup if already initialized (will redirect)
-  if (initData?.isInitialized) {
-    return null;
-  }
   const [showPassword, setShowPassword] = useState(false);
   const [adminData, setAdminData] = useState({
     name: '',
@@ -111,13 +88,42 @@ export default function SetupPage() {
     },
   });
 
+  // Redirect if already initialized
+  useEffect(() => {
+    if (!initLoading) {
+      if (initData?.isInitialized) {
+        router.push('/dashboard');
+      } else {
+        // If not initialized, ensure we are logged out to prevent stale auth issues
+        logout();
+      }
+    }
+  }, [initData, initLoading, router, logout]);
+
+  // Show loading state while checking initialization
+  if (initLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render setup if already initialized (will redirect)
+  if (initData?.isInitialized) {
+    return null;
+  }
+
   const handleFinish = async () => {
     // If on config step (step 4), save config and move to admin creation
     if (currentStep === 4) {
       try {
         await saveMutation.mutateAsync(config as Parameters<typeof saveMutation.mutate>[0]);
         setCurrentStep(5); // Move to admin creation step
-      } catch (error) {
+      } catch {
         // Error already handled in mutation
       }
     } else if (currentStep === 5) {
@@ -550,17 +556,17 @@ export default function SetupPage() {
           {currentStep === steps.length - 1 ? (
             <Button
               onClick={handleFinish}
-              disabled={setupAdminMutation.isLoading || saveMutation.isLoading}
+              disabled={setupAdminMutation.isPending || saveMutation.isPending}
             >
-              {setupAdminMutation.isLoading
+              {setupAdminMutation.isPending
                 ? 'Creating Admin...'
-                : saveMutation.isLoading
+                : saveMutation.isPending
                   ? 'Saving...'
                   : 'Create Admin Account'}
             </Button>
           ) : currentStep === steps.length - 2 ? (
-            <Button onClick={handleFinish} disabled={saveMutation.isLoading}>
-              {saveMutation.isLoading ? 'Saving...' : 'Save & Continue'}
+            <Button onClick={handleFinish} disabled={saveMutation.isPending}>
+              {saveMutation.isPending ? 'Saving...' : 'Save & Continue'}  
             </Button>
           ) : (
             <Button onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}>

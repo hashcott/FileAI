@@ -5,6 +5,11 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default tseslint.config(
   js.configs.recommended,
@@ -29,6 +34,8 @@ export default tseslint.config(
         ecmaFeatures: {
           jsx: true,
         },
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
       },
     },
     settings: {
